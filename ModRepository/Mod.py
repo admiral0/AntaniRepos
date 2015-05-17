@@ -101,7 +101,7 @@ class Mod:
                                   + str(type(self.data[key])))
             else:
                 if ck['required']:
-                    errors.append('Key ' + key + 'is required.')
+                    errors.append('Key ' + key + ' is required.')
         if len(errors) > 0:
             raise JsonNotValid(self.json_path, errors)
 
