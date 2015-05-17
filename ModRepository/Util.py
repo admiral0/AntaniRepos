@@ -39,7 +39,7 @@ actions = {
 parser = argparse.ArgumentParser(description='TechnicAntani ModRepo Tools')
 parser.add_argument('mod_repo', metavar='ModRepoPath', type=is_mod_repo, help='The path to Mod Repo directory',
                     default='.')
-parser.add_argument('-a', dest='action', type=str, default='validate', choices=[actions.keys()],
+parser.add_argument('-a', dest='action', type=str, default='validate', choices=actions.keys(),
                     help='Action to perform')
 
 
