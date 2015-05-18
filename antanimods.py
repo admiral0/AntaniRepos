@@ -1,4 +1,4 @@
 #!/usr/bin/python3
-from ModRepository import Util
+from antanirepos import Util
 
 Util.init()
