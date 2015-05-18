@@ -16,8 +16,7 @@ setup(
     keywords='minecraft technicantani technicplatform repositories git',
     url='https://github.com/admiral0/AntaniRepos',
     packages=[
-        'ModRepository',
-        'PackRepository'
+        'antanirepos'
     ],
     long_description=read('README'),
     classifiers=[
@@ -30,7 +29,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            'antanimods = ModRepository.Util:init'
+            'antanimods = antanirepos.Util:init'
         ]
     }
 )

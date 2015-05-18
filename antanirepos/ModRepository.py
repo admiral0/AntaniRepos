@@ -3,7 +3,8 @@ import os.path as path
 from os import walk
 import json
 import re
-from .Exceptions import JsonNotValid, RepositoryDirectoryDoesNotExist, RepositoryDoesNotHaveMetaJson
+from .Exceptions import JsonNotValid, RepositoryDirectoryDoesNotExist, RepositoryDoesNotHaveMetaJson, ModDoesNotExistInRepo
+from .Mod import Mod
 
 mod_file_name = 'mod.json'
 
@@ -52,3 +53,19 @@ class ModRepository:
             if mod_file_name in files:
                 mods[path.basename(mod_path)] = mod_path
         return mods
+
+
+class ModManager(ModRepository):
+    mods = {}
+
+    def __init__(self, repopath):
+        super().__init__(repopath)
+        self.mods_lazy = self.list_mods()
+
+    def get_mod(self, name):
+        if name not in self.mods.keys():
+            if name in self.mods_lazy.keys():
+                self.mods[name] = Mod(self.mods_lazy[name])
+            else:
+                raise ModDoesNotExistInRepo(name)
+        return self.mods[name]

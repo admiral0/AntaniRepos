@@ -1,8 +1,9 @@
 __author__ = 'admiral0'
 import os.path as path
 import re
-from .Exceptions import JsonNotValid, ModDoesNotExist, ModJsonDoesNotExist
-from .ModRepositoryManager import mod_file_name, read_json
+from .Exceptions import JsonNotValid, ModDoesNotExist, ModJsonDoesNotExist, ModVersionDoesNotExistInRepo
+from .ModRepository import mod_file_name, read_json
+from .Constants import minecraft_version_regex, validate, url_regex
 
 
 def validate_version(ver):
@@ -17,7 +18,7 @@ def validate_minecraft(mver, vv):
         return ['Minecraft version must be an array for version ' + vv]
 
     for mv in mver:
-        if not re.match(r'^\d+\.\d+(\.\d+)?$', mv):
+        if not re.match(minecraft_version_regex, mv):
             return ['Minecraft version ' + mv + ' does not match ^\d+\.\d+(\.\d+)?$ pattern in version ' + vv]
     return []
 
@@ -66,7 +67,7 @@ class Mod:
         'url': {
             'type': str,
             'required': True,
-            'validate': lambda val, m: [] if re.match(r'^https?:.*$', val) else ['Must be a link']
+            'validate': lambda val, m: [] if re.match(url_regex, val) else ['Must be a link']
         },
         'versions': {
             'type': dict,
@@ -87,21 +88,13 @@ class Mod:
         self.slug = path.basename(mod_path)
 
     def validate(self):
-        assert type(self.data) is dict
-        errors = []
-        for key in self._elements.keys():
-            ck = self._elements[key]
-            if key in self.data.keys():
-                if type(self.data[key]) is ck['type']:
-                    for err in ck['validate'](self.data[key], self):
-                        assert type(err) is str
-                        errors.append(err)
-                else:
-                    errors.append('Key ' + key + ' should be of type ' + str(ck['type']) + ' instead of '
-                                  + str(type(self.data[key])))
-            else:
-                if ck['required']:
-                    errors.append('Key ' + key + ' is required.')
+        errors = validate(self._elements, self.data, self)
         if len(errors) > 0:
             raise JsonNotValid(self.json_path, errors)
+
+
+    def get_version(self, version):
+        if version not in self.data['versions'].keys():
+            raise ModVersionDoesNotExistInRepo(self.slug, version)
+        return self.data['versions'][version]
 
