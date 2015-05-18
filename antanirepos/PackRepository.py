@@ -9,7 +9,7 @@ from .Exceptions import ModDoesNotExistInRepo, ModVersionDoesNotExistInRepo
 from .Exceptions import BranchDoesNotExist, TagDoesNotExist
 from .ModRepository import read_json
 from .ModRepository import ModManager
-from .Constants import minecraft_version_regex, url_regex, validate
+from .Common import minecraft_version_regex, url_regex, validate
 import pygit2
 
 

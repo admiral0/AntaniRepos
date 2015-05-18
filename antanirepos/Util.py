@@ -31,16 +31,27 @@ def list_mods(args):
         print(','.join(mod.data['versions'].keys()))
 
 
+def pack(args):
+    try:
+        ModRepository(args.mod_repo)
+    except JsonNotValid as e:
+        print(str(e))
+
+
 actions = {
-    'validate': validate,
-    'list': list_mods
+    'mods': validate,
+    'ls-mods': list_mods,
+    'pack': pack,
+    'list-pack': pack
 }
 
 parser = argparse.ArgumentParser(description='TechnicAntani ModRepo Tools')
-parser.add_argument('mod_repo', metavar='ModRepoPath', type=is_mod_repo, help='The path to Mod Repo directory',
-                    default='.')
-parser.add_argument('-a', dest='action', type=str, default='validate', choices=actions.keys(),
-                    help='Action to perform')
+
+parser.add_argument('action', metavar='action', type=str, default='mods', choices=actions.keys(),
+                    help='Action to perform. One of ' + ','.join(actions.keys()))
+parser.add_argument('mod_repo', metavar='path', type=is_mod_repo, help='The path to be inspected',
+                    default='.')  # , nargs='+')
+parser.add_argument('-m', dest='ModPath', type=is_mod_repo, help='Mod Repo parameter. Used in pack actions')
 
 
 def init():

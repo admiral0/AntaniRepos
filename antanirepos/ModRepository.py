@@ -1,21 +1,10 @@
 __author__ = 'admiral0'
 import os.path as path
 from os import walk
-import json
+from .Common import read_json, mod_file_name
 import re
 from .Exceptions import JsonNotValid, RepositoryDirectoryDoesNotExist, RepositoryDoesNotHaveMetaJson, ModDoesNotExistInRepo
 from .Mod import Mod
-
-mod_file_name = 'mod.json'
-
-
-def read_json(file):
-    try:
-        with open(file) as meta_data:
-            data = json.load(meta_data)
-            return data
-    except ValueError:
-        raise JsonNotValid(file, ['Cannot parse. Is it a valid JSON file?'])
 
 
 class ModRepository:

@@ -2,8 +2,7 @@ __author__ = 'admiral0'
 import os.path as path
 import re
 from .Exceptions import JsonNotValid, ModDoesNotExist, ModJsonDoesNotExist, ModVersionDoesNotExistInRepo
-from .ModRepository import mod_file_name, read_json
-from .Constants import minecraft_version_regex, validate, url_regex
+from .Common import *
 
 
 def validate_version(ver):
@@ -56,7 +55,7 @@ class Mod:
         'description': {
             'type': str,
             'required': False,
-            'validate': lambda val, m: [] if 0 == len(val) else ['Do not leave description empty!'],
+            'validate': lambda val, m: [],
         },
         'name': {
             'type': str,
